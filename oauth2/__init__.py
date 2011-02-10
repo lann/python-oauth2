@@ -620,7 +620,7 @@ class Client(httplib2.Http):
 
     def request(self, uri, method="GET", body='', headers=None, 
         redirections=httplib2.DEFAULT_MAX_REDIRECTS, connection_type=None,
-        parameter_method=None):
+        parameter_method=None, extra_parameters=None):
         DEFAULT_POST_CONTENT_TYPE = 'application/x-www-form-urlencoded'
 
         if not isinstance(headers, dict):
@@ -637,6 +637,10 @@ class Client(httplib2.Http):
             parameters = parse_qs(body)
         else:
             parameters = None
+
+        if extra_parameters:
+            paramaters = parameters or {}
+            parameters.update(extra_parameters)
 
         req = Request.from_consumer_and_token(self.consumer, 
             token=self.token, http_method=method, http_url=uri, 
